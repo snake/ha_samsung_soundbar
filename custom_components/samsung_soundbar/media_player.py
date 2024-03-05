@@ -1,12 +1,14 @@
 import logging
 from typing import Any, Mapping
 
-from homeassistant.components.media_player import (DEVICE_CLASS_SPEAKER,
-                                                   MediaPlayerEntity)
+from homeassistant.components.media_player import (
+    DEVICE_CLASS_SPEAKER,
+    MediaPlayerEntity)
 from homeassistant.components.media_player.const import (
     SUPPORT_PAUSE, SUPPORT_PLAY, SUPPORT_SELECT_SOUND_MODE,
     SUPPORT_SELECT_SOURCE, SUPPORT_STOP, SUPPORT_TURN_OFF, SUPPORT_TURN_ON,
-    SUPPORT_VOLUME_MUTE, SUPPORT_VOLUME_SET, SUPPORT_VOLUME_STEP)
+    SUPPORT_VOLUME_MUTE, SUPPORT_VOLUME_SET, SUPPORT_VOLUME_STEP,
+    SUPPORT_NEXT_TRACK, SUPPORT_PREVIOUS_TRACK)
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.entity import DeviceInfo, generate_entity_id
 
@@ -31,6 +33,8 @@ SUPPORT_SMARTTHINGS_SOUNDBAR = (
     | SUPPORT_PLAY
     | SUPPORT_STOP
     | SUPPORT_SELECT_SOUND_MODE
+    | SUPPORT_NEXT_TRACK
+    | SUPPORT_PREVIOUS_TRACK
 )
 
 
@@ -175,6 +179,12 @@ class SmartThingsSoundbarMediaPlayer(MediaPlayerEntity):
 
     async def async_media_stop(self):
         await self.device.media_stop()
+
+    async def async_media_next_track(self):
+        await self.device.media_next_track()
+
+    async def async_media_previous_track(self):
+        await self.device.media_previous_track()
 
     # This property can be uncommented for some extra_attributes
     # Still enabling this can cause side-effects.

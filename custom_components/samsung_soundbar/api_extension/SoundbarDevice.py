@@ -369,6 +369,18 @@ class SoundbarDevice:
     async def media_stop(self):
         await self.device.stop(True)
 
+    async def media_next_track(self):
+        component_id = "main"
+        capability = "mediaPlayback"
+        command = "fastForward"
+        await self.device.command(component_id, capability, command)
+
+    async def media_previous_track(self):
+        component_id = "main"
+        capability = "mediaPlayback"
+        command = "rewind"
+        await self.device.command(component_id, capability, command)
+
     @property
     def media_app_name(self):
         detail_status = self.device.status.attributes.get("detailName", None)
