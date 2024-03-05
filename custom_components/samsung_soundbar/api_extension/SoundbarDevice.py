@@ -8,6 +8,7 @@ from urllib.parse import quote
 from pysmartthings import DeviceEntity
 
 from ..const import DOMAIN
+from homeassistant.const import (STATE_IDLE, STATE_OFF, STATE_ON, STATE_PAUSED, STATE_PLAYING)
 
 log = logging.getLogger(__name__)
 
@@ -179,7 +180,15 @@ class SoundbarDevice:
 
     @property
     def state(self) -> str:
-        return "on" if self.device.status.switch else "off"
+        if self.device.status.switch:
+            if self.device.status.playback_status == "playing":
+                return STATE_PLAYING
+            elif self.device.status.playback_status == "paused":
+                return STATE_PAUSED
+            else:
+                return STATE_ON
+        else:
+            return STATE_OFF
 
     async def switch_off(self):
         await self.device.switch_off(True)
